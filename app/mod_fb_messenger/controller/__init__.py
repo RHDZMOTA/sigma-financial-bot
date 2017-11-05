@@ -1,8 +1,7 @@
 import settings.config as config
 import json
 
-from flask import Blueprint, request, render_template, flash, g, session, redirect, url_for, jsonify
-from werkzeug import check_password_hash, generate_password_hash
+from flask import Blueprint, request, flash, g, session, redirect, url_for, jsonify
 from app import app
 
 from app.mod_fb_messenger.service import FacebookWebHook, EntryManager
