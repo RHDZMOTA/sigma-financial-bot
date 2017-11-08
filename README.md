@@ -68,7 +68,6 @@ See `LICENSE.md` file for more details.
 ## TODO
 
 * Code data models and implement ndb for complex queries.
-* Implement services.
 * JSON Config data.
 * Add functionality related to finance
     * Stock info
