@@ -170,5 +170,4 @@ appengine-generated/
 
 test/
 #*.json
-data/
 logs/
