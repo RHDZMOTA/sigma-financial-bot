@@ -168,6 +168,6 @@ appengine-generated/
 .cvsignore
 */.cvsignore
 
-test/
-#*.json
+
+client_secret.json
 logs/

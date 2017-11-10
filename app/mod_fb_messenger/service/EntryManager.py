@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
 import requests
+import time
 import json
 
 from settings import config
 from app.mod_fb_messenger.service.QuickReplier import QuickReplier
 from app.mod_fb_messenger.service.MessageManager import MessageManager
+from app.mod_fb_messenger.model.MessageDatastore import IncomingMessageModel
 from app.mod_fb_messenger.model import RegisterUser, MessageInfo, MessageDatastore, ResponseDatastore,\
     TextMessage, ImageMessage
 
@@ -45,9 +47,19 @@ class EntryManager(object):
         return messages
 
     def get_responses(self):
+        epoch_time = int(time.time())
         for message in self.message_postback_list:
 
             message_info = MessageInfo(message)
+
+            # NOTE: This is needed in order to avoid answering multiple times the same message.
+            query = IncomingMessageModel.query(
+                IncomingMessageModel.unix_query > epoch_time - 25,  # TODO: refactor this.
+                IncomingMessageModel.sender == int(message_info.sender),
+                IncomingMessageModel.text == message_info.text
+            ).fetch(limit=1)
+            if len(query) and (message_info.payload is None):
+                continue
             MessageDatastore(message_info).save_message()
             user_info = RegisterUser(sender=message_info.sender).get_info()
             response_packet = MessageManager(message_info, user_info).get_responses()
@@ -79,7 +91,7 @@ class ResponseObject(object):
     def get_message(self):
         if self.content_type == "text":
             message = self.type_text()
-        elif self.content == "image":
+        elif self.content_type == "image":
             message = self.type_image()
         else:
             message = None

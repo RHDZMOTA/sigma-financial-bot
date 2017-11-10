@@ -26,9 +26,13 @@ class ResponseDatastore(object):
         response_dict = ro.to_dict()
         ro.quick_reply.generate_quick_reply()
         group = ro.quick_reply.get_response().get_group()
+        try:
+            msn = response_dict["message"].get("text").encode('utf8', 'replace')
+        except:
+            msn = "<empty or error>"  # TODO: fix this (UnicodeError)
         ResponseModel(
             sender=int(ro.sender),
-            text=str(response_dict["message"].get("text")),
+            text=msn, #msn.encode('utf8', 'replace') if msn else "-".encode('utf8', 'replace'),
             attachment_url=str(response_dict["message"]["attachment"]["payload"].get("url"))\
                 if response_dict["message"].get("attachment")\
                 else None,

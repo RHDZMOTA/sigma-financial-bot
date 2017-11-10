@@ -43,7 +43,10 @@ You can now test the app at locahost.
 2. Login. 
     * `gcloud auth login`
 
-3. Run the following:
+3. [If needed] Create and load indexes.
+    * `gcloud datastore create-indexes index.yaml --project sigma-financial-bot`
+
+4. Upload changes to app engine:
     * `gcloud app deploy --project sigma-financial-bot`
 
 The app will be running at: https://sigma-financial-bot.appspot.com 

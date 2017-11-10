@@ -3,6 +3,7 @@
 import random
 
 from app.mod_fb_messenger.model import ResponsePacket, SingleResponse, AbstractPayloadResponses, ABCMeta
+from data.stocks import get_tickers
 
 
 class MyInformation(AbstractPayloadResponses):
@@ -22,6 +23,41 @@ class MyInformation(AbstractPayloadResponses):
                         ),
                         SingleResponse(
                             content=self.get_user_info(),
+                            content_type="text",
+                            complement_info="None"
+                        )
+                    ]
+                )
+            )
+
+
+class ShowStocks(AbstractPayloadResponses):
+    __metaclass__ = ABCMeta
+
+    def show_stocks(self):
+        if self.get_payload() == "show_stocks":
+            tickers = get_tickers()
+            self.set_response_packet(
+                ResponsePacket(
+                    quick_reply_id="main_menu",
+                    single_list=[
+                        SingleResponse(
+                            content="These are all the stocks I have access to. Have fun. ;)",
+                            content_type="text",
+                            complement_info="None"
+                        ),
+                        SingleResponse(
+                            content="*First batch 0-50*\n\n" + " ".join(tickers[:50]),
+                            content_type="text",
+                            complement_info="None"
+                        ),
+                        SingleResponse(
+                            content="*Next batch 50-100*\n\n" + " ".join(tickers[50:100]),
+                            content_type="text",
+                            complement_info="None"
+                        ),
+                        SingleResponse(
+                            content="*Last batch 100-141*\n\n" + " ".join(tickers[100:141]),
                             content_type="text",
                             complement_info="None"
                         )
@@ -127,7 +163,7 @@ class MoreOptions(AbstractPayloadResponses):
             )
 
 
-class PayloadResponses(MyInformation, MoreOptions, GenericResponse):
+class PayloadResponses(MyInformation, MoreOptions, GenericResponse, ShowStocks):
 
     def __init__(self, payload, user_info):
         self.user_info = user_info
@@ -155,6 +191,7 @@ class PayloadResponses(MyInformation, MoreOptions, GenericResponse):
     def generate(self):
         self.my_info()
         self.all_more_options()
+        self.show_stocks()
         # add more
         self.generic()
         return self.response_packet
