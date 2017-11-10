@@ -330,6 +330,9 @@ class CreatePortfolio(AbstractTextResponses):
 
         def create_markowitz_response(resp):
 
+            if "Error" in resp:
+                return resp.get("Error")
+
             ans = """
             **Markowitz Portfolio**
             
@@ -373,7 +376,7 @@ class CreatePortfolio(AbstractTextResponses):
                         quick_reply_id="main_menu",
                         single_list=[
                             SingleResponse(
-                                content=create_markowitz_response(mark_resp),
+                                content=mark_resp,#create_markowitz_response(mark_resp),
                                 content_type="text",
                                 complement_info="None"
                             )

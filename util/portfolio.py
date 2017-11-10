@@ -1,5 +1,5 @@
 
-from util.custom_requests import get_request_json
+from util.custom_requests import get_request_json, get_request_content
 
 
 BMV_PORTFOLIO_API = "https://bmv-portfolio-api.herokuapp.com"
@@ -28,11 +28,12 @@ class PortfolioManager(object):
             return 0 < float(x) and float(x) < 100
         if not validate_percetile(percentile):
             return {"Error": "Percentile not valid."}
-        resp = get_request_json(BMV_PORTFOLIO_API + BMV_MARKOWITZ.format(stocks=str(self.stocks), perc=str(percentile)))
-        #try:
-        #    resp = get_request_json(BMV_PORTFOLIO_API + BMV_MARKOWITZ.format(stocks=str(self.stocks), perc=str(percentile)))
-        #except:
-        #    resp = {"Error": "Unable to reach markowitz-portfolio-creation service."}
+        #resp = get_request_json(BMV_PORTFOLIO_API + BMV_MARKOWITZ.format(stocks=str(self.stocks), perc=str(percentile)))
+        try:
+            #resp = get_request_json(BMV_PORTFOLIO_API + BMV_MARKOWITZ.format(stocks=str(self.stocks), perc=str(percentile)))
+            resp = get_request_content(BMV_PORTFOLIO_API + BMV_MARKOWITZ.format(stocks=str(self.stocks), perc=str(percentile)))
+        except:
+            resp = "Error: Unable to reach markowitz-portfolio-creation service."#{"Error": "Unable to reach markowitz-portfolio-creation service."}
         return resp
 
 
