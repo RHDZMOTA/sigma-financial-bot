@@ -25,3 +25,4 @@ indexes:
   properties:
   - name: stock
   - name: unix_query
+

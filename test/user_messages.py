@@ -49,5 +49,3 @@ text = "create portfolio BIMBO ALSEA"
 txt_ex = generate_example_text(text)
 r = send_text_message(text)
 r.json()
-
-

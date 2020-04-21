@@ -77,3 +77,4 @@ See `LICENSE.md` file for more details.
     * Stock plots
     * Recommendations
 * Add tests
+

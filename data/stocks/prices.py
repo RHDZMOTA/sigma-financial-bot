@@ -148,5 +148,3 @@ def suggestion_strategy(xs):
     else:
         ratio = " < undefined >"
     return probs, most_common(suggs), ratio
-
-
